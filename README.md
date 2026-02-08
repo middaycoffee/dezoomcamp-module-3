@@ -25,3 +25,28 @@ SELECT * FROM `your_project.your_dataset.external_yellow_tripdata`;
 
 -- 3. Counting records
 SELECT COUNT(*) FROM `your_project.your_dataset.yellow_tripdata_non_partitioned`;
+
+--- 4. Data Read Estimation
+-- External Table Query
+SELECT COUNT(DISTINCT(PULocationID)) 
+FROM `your_project.your_dataset.external_yellow_tripdata`;
+
+-- Materialized Table Query
+SELECT COUNT(DISTINCT(PULocationID)) 
+FROM `your_project.your_dataset.yellow_tripdata_non_partitioned`;
+
+--- 5. Counting zero fare trips
+SELECT count(*) 
+FROM `your_project.your_dataset.yellow_tripdata_non_partitioned`
+WHERE fare_amount = 0;
+
+--- 6. Partition Benefits
+-- Scan on Non-Partitioned Table
+SELECT DISTINCT VendorID
+FROM `your_project.your_dataset.yellow_tripdata_non_partitioned`
+WHERE tpep_dropoff_datetime BETWEEN '2024-03-01' AND '2024-03-15';
+
+-- Scan on Partitioned Table
+SELECT DISTINCT VendorID
+FROM `your_project.your_dataset.yellow_tripdata_partitioned`
+WHERE tpep_dropoff_datetime BETWEEN '2024-03-01' AND '2024-03-15';
